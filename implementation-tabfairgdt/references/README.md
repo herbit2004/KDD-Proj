@@ -5,6 +5,6 @@
 3. **不平衡数据比较：** Emmanouil Panagiotou、Arjun Roy 与 Eirini Ntoutsi. “Synthetic Tabular Data Generation for Class Imbalance and Fairness: A Comparative Study.” arXiv:2409.05215，第 1 版，2024。[arXiv 页面](https://arxiv.org/abs/2409.05215) · [PDF](https://arxiv.org/pdf/2409.05215)。本地文件：`local-pdf/2409.05215.pdf`（15 页）。该文同时讨论类别与敏感群体不平衡，供生成器评价方案参考；未确认公开再分发许可。
 4. **公平性定义：** Mahed Abroshan、Andrew Elliott 与 Mohammad Mahdi Khalili. “Imposing Fairness Constraints in Synthetic Data Generation.” *Proceedings of AISTATS*，PMLR 238:2269–2277，2024。[会议页面](https://proceedings.mlr.press/v238/abroshan24a.html) · [PDF](https://proceedings.mlr.press/v238/abroshan24a/abroshan24a.pdf)。本地文件：`local-pdf/abroshan24a.pdf`（22 页，含附录）。该文区分生成阶段的公平约束与下游预测的公平评价；未确认这一 PDF 文件的公开再分发条款。
 
-**数据与代码：** [作者 GitHub 仓库](https://github.com/Panagiotou/TABFAIRGDT)采用 MIT 许可，包含示例、实验和评价脚本。主要基准为 [UCI Adult](https://archive.ics.uci.edu/dataset/2/adult)；仓库的数据加载器和 UCI 页面提供获取入口。示例代码设 `lamda=0` 表示不作公平调整，拟合时可设置更高的数值。
+**数据与代码：** [作者 GitHub 仓库](https://github.com/Panagiotou/TABFAIRGDT)采用 MIT 许可，包含示例、实验和评价脚本。主要基准为作者配置的 [Adult 清洗文件](https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/adult-clean.csv)；[数据加载配置](https://github.com/Panagiotou/TABFAIRGDT/blob/main/tabular_datasets/Info/adult_info.json)指向这一外部文件，[UCI Adult 原版页面](https://archive.ics.uci.edu/dataset/2/adult)用于核对数据来源与字段。示例代码设 `lamda=0` 表示不作公平调整，拟合时可设置更高的数值。
 
 **版本差异：** Canvas 推荐清单仅列出四位作者；课程 PDF 与所链接的 arXiv 第 1 版均列出上述七位作者。

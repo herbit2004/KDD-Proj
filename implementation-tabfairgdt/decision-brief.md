@@ -4,7 +4,7 @@
 
 ## 研究内容与复现边界
 
-TABFAIRGDT 使用自回归决策树生成表格记录，并在生成过程中处理指定敏感属性的公平性约束。论文强调与较重的生成器相比的速度、效用和公平性。本项目在一至两份公开数据上重现这三方面比较：原始数据训练的下游模型、普通树生成器、TABFAIRGDT，以及仓库中可轻量运行的一个生成基线。关注公平指标改善是否以任务效用或群体覆盖损失为代价。
+TABFAIRGDT 使用自回归决策树生成表格记录，并在生成过程中处理指定敏感属性的公平性约束。论文强调与较重的生成器相比的速度、效用和公平性。本项目在作者加载器指定的 Adult 清洗数据上比较四种条件：真实训练数据、无公平调整的树生成器（`lamda=0`），以及两档公平调整（`lamda=0.5`、`lamda=1`）。关注公平指标改善是否以任务效用或群体覆盖损失为代价。
 
 配套阅读中，FairGAN 是生成公平数据的早期基线；Panagiotou 等人的比较研究分析类别与敏感群体不平衡；Abroshan 等人区分生成数据约束与下游预测公平性。这三篇用于确定指标、解释结果和定位基线；数值实验限定为仓库可运行的基线。
 
@@ -15,7 +15,7 @@ TABFAIRGDT 使用自回归决策树生成表格记录，并在生成过程中处
 | 论文 | [arXiv v1](https://arxiv.org/abs/2509.19927)，ICDM 2025；CC BY 4.0，公开目录可保存署名 PDF。 |
 | 代码 | [作者仓库](https://github.com/Panagiotou/TABFAIRGDT)，MIT；`example.py` 是最小入口，`main.py --dataset ... --methods ... --mode run` 可跑多方法，`--mode plot` 画图；另有 `run_experiment.py`、评估与竞品模块。**入口较齐，但尚未安装或跑通**。完整基线环境含 `synthcity`、`atom-ml[full]`，可选竞品和公平切分还要装额外包，不能把一次样例运行等同于整篇复现。 |
 | 训练与评估 | 必须拟合生成器、采样合成数据、训练下游分类器并计算效用与群体公平指标；一般不需 GPU。 |
-| 数据 | `tabular_datasets/dataset.py` 有数据集配置并使用 `ucimlrepo`、Folktables 等途径自动抓取支持的真实基准，首次运行需要网络并生成本地缓存。可先选 [UCI Adult](https://archive.ics.uci.edu/dataset/2/adult)；原始数据不直接捆绑在仓库。须固定敏感属性、预测标签、缺失值处理和训练集与测试集划分，防止生成数据泄漏到评估集。 |
+| 数据 | `tabular_datasets/dataset.py` 按数据集配置从外部来源获取文件；其他配置还会使用 `ucimlrepo`、Folktables 等渠道。首次运行需要网络并生成本地缓存。核心实验使用作者配置的 [Adult 清洗文件](https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/adult-clean.csv)，并对照 [UCI Adult 原版说明](https://archive.ics.uci.edu/dataset/2/adult)核对字段与样本数；数据不随代码仓库提供。须固定敏感属性、预测标签、缺失值处理和训练集与测试集划分，防止生成数据泄漏到评估集。 |
 | 算力 | 小中型表格数据在 CPU 可行。先用 10k–50k 行、少量随机种子估时，之后再决定是否扩大。 |
 
 ## 实验设计与产出
