@@ -1,13 +1,21 @@
 # Revisiting OVO and OVR under Multiclass Imbalance
 
 **COMP5331 project type:** Implementation
+
 **Group number:** [Group number]
+
 **Member 1:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+
 **Member 2:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+
 **Member 3:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+
 **Member 4:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+
 **Member 5:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+
 **Member 6 (if applicable):** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+
 **Declaration:** This project is conducted solely within COMP5331. It is not work for another course, a research project, or an FYP.
 
 ## Project description
@@ -18,11 +26,19 @@ Multiclass classification is often implemented by combining binary decisions. On
 
 The central research question for this implementation is whether the difference between OVO and OVR becomes larger or changes direction as the training class distribution becomes less balanced. We will examine macro-averaged F1, balanced accuracy, geometric-mean recall, and class-wise recall alongside ordinary accuracy. A second question is whether apparent differences are stable across datasets and random seeds or depend on a particular split. These questions make the implementation more informative than simply obtaining one table of final scores. Our goal is to reproduce the paper's qualitative comparison on a limited, explicitly documented set of public datasets, and to identify which experimental choices are necessary to make the comparison fair.
 
+### Relation to prior comparisons
+
+Hsu and Lin's earlier multiclass SVM comparison treats OVO and OVR as competing decompositions and reports strong practical performance for OVO. Rifkin and Klautau argue that a carefully tuned OVR classifier can be as accurate as more elaborate schemes. These studies establish why the comparison cannot be settled by the number of binary classifiers alone; neither centers the class-imbalance and minority-class metrics emphasized by Chen and Lin. We will read their experimental protocols to identify how kernel choice, validation, and score aggregation could alter the apparent ranking. Our reproduction will therefore report both accuracy and minority-sensitive metrics under an aligned tuning budget, making the relationship between the older conclusions and the 2025 findings explicit.
+
 ### Paper and implementation scope
 
 The primary paper is Kuan-Ting Chen and Chih-Jen Lin, “Revisiting One-Versus-One and One-Versus-Rest: Insights into Imbalanced Multi-class Classification,” ICDM 2025. The authors provide a paper and code archive on their publication page. We will inspect that implementation for its data representation, kernel configuration, decision aggregation, and parameter search. The core reproduction will use the kernel support vector machine setting, where the OVO/OVR decomposition can be isolated cleanly. If the code archive contains working scripts for the paper's other model families, we may add one small neural-classifier comparison, but the SVM comparison is the committed result. This boundary keeps the project feasible without changing its central question.
 
-We will choose two or three public multiclass datasets from the paper's LIBSVM, UCI, or KEEL sources. Selection criteria are at least three classes, enough examples in every class to permit repeated train/test splits, a tractable number of examples for kernel SVM training, and clear access to the original labels and features. We will document the dataset version, source URL, class counts, missing-value handling, categorical encoding, feature scaling, and any sample-size restriction. Preprocessing parameters will be estimated on the training partition only. We will retain one fixed test partition for each replicate, while constructing several training partitions with different class ratios. This design isolates the effect of training imbalance from a change in the evaluation population.
+We will use Segment (2,310 instances, seven classes) and Vehicle (846 instances, four classes) from the author archive's LIBSVM download list. Both are small enough for repeated kernel SVM fitting and provide different numbers of classes. We will document the dataset version, source URL, class counts, missing-value handling, categorical encoding, feature scaling, and any sample-size restriction. The downloaded LIBSVM files are already scaled; we will record that upstream transformation. Any additional normalization, imputation, and model selection will be fit within the training fold only. We will retain one fixed test partition for each replicate, while constructing several training partitions with different class ratios. This design isolates the effect of training imbalance from a change in the evaluation population.
+
+### Reproduction checkpoints
+
+The author archive contains separate environment, dataset retrieval, preprocessing, SVM, neural-network, and result-generation scripts. We will use its SVM path as the primary reproducibility target and record the commit or archive checksum, software versions, and exact dataset identifiers. Before comparing algorithms, we will confirm that OVO voting and OVR score selection agree with the definitions in the paper on a tiny hand-checked multiclass example. We will then run one unchanged author configuration and preserve its output as a reference. Our controlled imbalance study will reuse the same test partition across methods and imbalance levels, while fitting preprocessing and model-selection steps inside each training fold. This order prevents a change in the test population from being mistaken for an OVO–OVR effect. We will present both the paper-aligned result and the new imbalance curves, with the exact differences in data preparation stated beside each comparison.
 
 ### Experimental protocol
 
@@ -36,15 +52,7 @@ To make the results robust, we will compare variation across seeds rather than s
 
 Before the final comparison, we will run two checks on the experimental pipeline. First, every generated training split must contain the intended number of examples from each class, and its paired test partition must remain unchanged across imbalance conditions. Second, predictions from a small hand-checkable example must be consistent with the selected OVO or OVR aggregation rule. These checks matter because an accidental change in split composition or decision aggregation could appear as an algorithmic effect. We will archive the resulting split summaries and one example prediction trace with the code.
 
-The implementation will produce a reproducible pipeline for downloading or preparing selected datasets, creating saved imbalance splits, fitting both decompositions, computing metrics, and generating tables and plots. The accompanying report will describe the paper's claim, the reproduced configuration, any departures caused by data or code availability, and the extent to which the results support the claim. A successful outcome is not defined as obtaining the same numeric score to several decimal places. It is a well-controlled comparison that reveals whether conclusions based on accuracy remain appropriate when minority-class performance is measured directly. Negative or mixed results will be valuable if they can be traced to differences in class distribution, tuning, or data properties. This implementation is achievable with ordinary CPU resources and gives the group a clear path from a published observation to a replicable empirical result.
-
-### Relation to prior comparisons
-
-Hsu and Lin's earlier multiclass SVM comparison treats OVO and OVR as competing decompositions and reports strong practical performance for OVO. Rifkin and Klautau argue that a carefully tuned OVR classifier can be as accurate as more elaborate schemes. These studies establish why the comparison cannot be settled by the number of binary classifiers alone; neither centers the class-imbalance and minority-class metrics emphasized by Chen and Lin. We will read their experimental protocols to identify how kernel choice, validation, and score aggregation could alter the apparent ranking. Our reproduction will therefore report both accuracy and minority-sensitive metrics under an aligned tuning budget, making the relationship between the older conclusions and the 2025 findings explicit.
-
-### Reproduction checkpoints
-
-The author archive contains separate environment, dataset retrieval, preprocessing, SVM, neural-network, and result-generation scripts. We will use its SVM path as the primary reproducibility target and record the commit or archive checksum, software versions, and exact dataset identifiers. Before comparing algorithms, we will confirm that OVO voting and OVR score selection agree with the definitions in the paper on a tiny hand-checked multiclass example. We will then run one unchanged author configuration and preserve its output as a reference. Our controlled imbalance study will reuse the same test partition across methods and imbalance levels, while fitting preprocessing and model-selection steps inside each training fold. This order prevents a change in the test population from being mistaken for an OVO–OVR effect. We will present both the paper-aligned result and the new imbalance curves, with the exact differences in data preparation stated beside each comparison.
+The implementation will produce a reproducible pipeline for downloading or preparing selected datasets, creating saved imbalance splits, fitting both decompositions, computing metrics, and generating tables and plots. The accompanying report will describe the paper's claim, the reproduced configuration, any departures caused by data or code availability, and the extent to which the results support the claim. The central result will be a controlled comparison of accuracy and minority-sensitive metrics across documented class ratios. The report will relate any differences from the published results to data version, class distribution, model tuning, and decision aggregation. CPU training times will be reported for each dataset and condition.
 
 ## Papers to read
 
