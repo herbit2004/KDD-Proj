@@ -13,7 +13,7 @@ TABFAIRGDT 使用自回归决策树生成表格记录，并在生成过程中处
 | 维度 | 状态与具体入口 |
 |---|---|
 | 论文 | [arXiv v1](https://arxiv.org/abs/2509.19927)，ICDM 2025；CC BY 4.0，公开目录可保存署名 PDF。 |
-| 代码 | [作者仓库](https://github.com/Panagiotou/TABFAIRGDT)，MIT；`example.py` 是最小入口，`main.py --dataset ... --methods ... --mode run` 可跑多方法，`--mode plot` 画图；另有 `run_experiment.py`、评估与竞品模块。**入口较齐，但尚未安装或跑通**。完整基线环境含 `synthcity`、`atom-ml[full]`，可选竞品和公平切分还要装额外包，不能把一次样例运行等同于整篇复现。 |
+| 代码 | [作者仓库](https://github.com/Panagiotou/TABFAIRGDT)，MIT；`example.py` 是最小入口，`main.py --dataset ... --methods ... --mode run` 可跑多方法，`--mode plot` 画图；另有 `run_experiment.py`、评估与竞品模块。版本 `f93cefbacd5a` 的 `example.py` 已在本机以 Python 3.12、NumPy 2.4.4、pandas 3.0.2、scikit-learn 1.8.0、SciPy 1.17.1 跑通，无需改动源码；它使用合成的 500 行数据完成拟合、生成和基本统计。完整基线环境含 `synthcity`、`atom-ml[full]`，可选竞品和公平切分还要装额外包；论文数据集与全套基线尚未运行。 |
 | 训练与评估 | 必须拟合生成器、采样合成数据、训练下游分类器并计算效用与群体公平指标；一般不需 GPU。 |
 | 数据 | `tabular_datasets/dataset.py` 按数据集配置从外部来源获取文件；其他配置还会使用 `ucimlrepo`、Folktables 等渠道。首次运行需要网络并生成本地缓存。核心实验使用作者配置的 [Adult 清洗文件](https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/adult-clean.csv)，并对照 [UCI Adult 原版说明](https://archive.ics.uci.edu/dataset/2/adult)核对字段与样本数；数据不随代码仓库提供。须固定敏感属性、预测标签、缺失值处理和训练集与测试集划分，防止生成数据泄漏到评估集。 |
 | 算力 | 小中型表格数据在 CPU 可行。先用 10k–50k 行、少量随机种子估时，之后再决定是否扩大。 |
@@ -24,4 +24,4 @@ TABFAIRGDT 使用自回归决策树生成表格记录，并在生成过程中处
 
 ## 实施依赖与核对点
 
-仓库有 `example.py` 和多方法实验入口；主要实验链由数据加载、生成器拟合、合成数据采样、下游分类训练和真实测试集评估组成。需固定 Adult 数据版本、敏感属性编码、分类标签及同一训练/测试划分；竞品方法另需安装其依赖。当前已核对入口及依赖声明，尚无运行记录。
+仓库有 `example.py` 和多方法实验入口；主要实验链由数据加载、生成器拟合、合成数据采样、下游分类训练和真实测试集评估组成。最小示例已完成 500 行合成数据的生成；示例输出中 `lamda=0.5` 的人口统计均等差异为 0.071，原数据为 0.201。这只是随机生成示例的一次结果，不能代替 Adult 数据与下游分类评估。正式实验需固定 Adult 数据版本、敏感属性编码、分类标签及同一训练/测试划分；竞品方法另需安装其依赖。

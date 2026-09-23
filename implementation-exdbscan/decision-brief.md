@@ -13,8 +13,8 @@ DBSCAN 会把点归到密度簇或噪声，但“怎样最小改变一个点使�
 | 维度 | 状态与具体入口 |
 |---|---|
 | 论文 | 2026 年 KDD 正文 12 页，DOI [10.1145/3770855.3817692](https://doi.org/10.1145/3770855.3817692)；正文首页声明 CC BY 4.0，Canvas 可阅读。另有 [arXiv 补充材料](https://arxiv.org/abs/2605.30225)，24 页，本地已下载。两者是**不同文档**，目前本地目录缺 KDD 正文 PDF。 |
-| 代码 | [作者仓库](https://github.com/tommasoamico/ExDBSCAN)有 `modules/dbscanCounterfactuals.py` 等核心实现；未见 LICENSE、`requirements.txt` 或锁定环境。`runExDbscan.py` 启动时即读取不存在的 `data/iclrDbscan/resultsDiversityNonActionableDPP.csv`，还依赖缺失的 `datasetsParameters.json`；**原样克隆后不能直接运行主实验**。需要自建小型驱动脚本调用核心类，并记录兼容性修改。未实际运行。 |
-| 训练与评估 | 无神经模型训练；需要拟合 DBSCAN，按固定簇结构生成解释，独立核对目标簇核心点邻域的有效性，并计算论文定义的接近度（proximity）、DPP 多样性和每次查询耗时。 |
+| 代码 | [作者仓库](https://github.com/tommasoamico/ExDBSCAN)有 `modules/dbscanCounterfactuals.py` 等核心实现；未见 LICENSE、`requirements.txt` 或锁定环境。`runExDbscan.py` 引用仓库未提供的结果 CSV 与参数 JSON；`modules/utilityFunctions.py` 还导入未提供的 `SHADE.shade` 路径及多个基准方法依赖。对版本 `414da7c142a2` 的最小导入检查在 `ModuleNotFoundError: No module named 'SHADE'` 处停止，故核心方法尚未运行。需先恢复或隔离核心方法所需依赖，再编写小型驱动脚本。 |
+| 训练与评估 | 选定的数值特征实验无需训练神经模型；需要拟合 DBSCAN，按固定簇结构生成解释，独立核对目标簇核心点邻域的有效性，并计算论文定义的接近度（proximity）、DPP 多样性和每次查询耗时。仓库辅助模块引入神经基准的依赖，并不等于本项目必须训练这些基准。 |
 | 数据 | 论文用多份 OpenML 表格数据，可经 [OpenML](https://www.openml.org/)下载。先用可控二维合成数据和 UCI Iris/Wine 等小数据；记录数值化、标准化、`eps`、`min_samples` 与噪声比例。 |
 | 算力 | CPU 足够做小型数据；反事实候选搜索可能随维度和候选数增长。限制数据规模，并记录每个查询点的运行时间。 |
 
@@ -24,4 +24,4 @@ DBSCAN 会把点归到密度簇或噪声，但“怎样最小改变一个点使�
 
 ## 实施依赖与核对点
 
-仓库提供核心类，但主实验脚本引用的结果 CSV 与参数 JSON 不在已检查的版本中。所需新增组件为：小型数据加载与标准化脚本、DBSCAN 参数配置、调用核心类的实验脚本、独立有效性检查器，以及距离、多样性和耗时统计。代码仓库未标明许可；当前已检查源码结构，尚无核心类的实际运行记录。
+仓库提供核心类，但主实验脚本引用的结果 CSV 与参数 JSON 不在已检查的版本中，辅助模块的顶层导入又把本实验不使用的 SHADE、UMAP、ClustPy、DiCE 等基准代码带入核心路径。所需新增组件为：可复现的最小环境与必要导入修复、小型数据加载与标准化脚本、DBSCAN 参数配置、调用核心类的实验脚本、独立有效性检查器，以及距离、多样性和耗时统计。`__counterfactualGivenTargetPoint` 将候选放在距目标核心点恰好 `eps` 的边界，而仓库的 `PredictDBSCAN.predict` 使用严格小于 `eps` 的判断；应专门测试边界样例，并以独立定义的固定簇判定报告有效性。代码仓库未标明许可；截至本次检查，核心类仍未完成实际运行。
