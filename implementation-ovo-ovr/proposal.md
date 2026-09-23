@@ -1,10 +1,14 @@
 # Revisiting OVO and OVR under Multiclass Imbalance
 
-**COMP5331 project type:** Implementation  
-**Group number:** [Group number]  
-**Members (name; student ID; research/FYP supervisor and topic, if applicable):** [Member 1]; [Member 2]; [Member 3]; [Member 4]; [Member 5]; [Member 6, if applicable]  
-**Relationship to members' research/FYP:** [For each member, state whether a research/FYP topic exists and, if so, explain how this course project differs.]  
-**Course-project declaration:** This work is undertaken for COMP5331 and will be reported as a course project.
+**COMP5331 project type:** Implementation
+**Group number:** [Group number]
+**Member 1:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 2:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 3:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 4:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 5:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 6 (if applicable):** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Declaration:** This project is conducted solely within COMP5331. It is not work for another course, a research project, or an FYP.
 
 ## Project description
 
@@ -34,6 +38,16 @@ Before the final comparison, we will run two checks on the experimental pipeline
 
 The implementation will produce a reproducible pipeline for downloading or preparing selected datasets, creating saved imbalance splits, fitting both decompositions, computing metrics, and generating tables and plots. The accompanying report will describe the paper's claim, the reproduced configuration, any departures caused by data or code availability, and the extent to which the results support the claim. A successful outcome is not defined as obtaining the same numeric score to several decimal places. It is a well-controlled comparison that reveals whether conclusions based on accuracy remain appropriate when minority-class performance is measured directly. Negative or mixed results will be valuable if they can be traced to differences in class distribution, tuning, or data properties. This implementation is achievable with ordinary CPU resources and gives the group a clear path from a published observation to a replicable empirical result.
 
+### Relation to prior comparisons
+
+Hsu and Lin's earlier multiclass SVM comparison treats OVO and OVR as competing decompositions and reports strong practical performance for OVO. Rifkin and Klautau argue that a carefully tuned OVR classifier can be as accurate as more elaborate schemes. These studies establish why the comparison cannot be settled by the number of binary classifiers alone; neither centers the class-imbalance and minority-class metrics emphasized by Chen and Lin. We will read their experimental protocols to identify how kernel choice, validation, and score aggregation could alter the apparent ranking. Our reproduction will therefore report both accuracy and minority-sensitive metrics under an aligned tuning budget, making the relationship between the older conclusions and the 2025 findings explicit.
+
+### Reproduction checkpoints
+
+The author archive contains separate environment, dataset retrieval, preprocessing, SVM, neural-network, and result-generation scripts. We will use its SVM path as the primary reproducibility target and record the commit or archive checksum, software versions, and exact dataset identifiers. Before comparing algorithms, we will confirm that OVO voting and OVR score selection agree with the definitions in the paper on a tiny hand-checked multiclass example. We will then run one unchanged author configuration and preserve its output as a reference. Our controlled imbalance study will reuse the same test partition across methods and imbalance levels, while fitting preprocessing and model-selection steps inside each training fold. This order prevents a change in the test population from being mistaken for an OVO–OVR effect. We will present both the paper-aligned result and the new imbalance curves, with the exact differences in data preparation stated beside each comparison.
+
 ## Papers to read
 
-1. Kuan-Ting Chen and Chih-Jen Lin. “Revisiting One-Versus-One and One-Versus-Rest: Insights into Imbalanced Multi-class Classification.” ICDM 2025. [Paper and code](https://www.csie.ntu.edu.tw/~cjlin/papers/ovo-ovr/).
+1. **Main paper:** Kuan-Ting Chen and Chih-Jen Lin. “Revisiting One-Versus-One and One-Versus-Rest: Insights into Imbalanced Multi-class Classification.” *IEEE ICDM*, 2025. [Paper and code](https://www.csie.ntu.edu.tw/~cjlin/papers/ovo-ovr/).
+2. **Method comparison:** Chih-Wei Hsu and Chih-Jen Lin. “A Comparison of Methods for Multi-class Support Vector Machines.” *IEEE Transactions on Neural Networks* 13(2):415–425, 2002. [Author PDF](https://www.csie.ntu.edu.tw/~cjlin/papers/multisvm.pdf).
+3. **Contrasting OVR evidence:** Ryan Rifkin and Aldebaro Klautau. “In Defense of One-Vs-All Classification.” *Journal of Machine Learning Research* 5:101–141, 2004. [Paper](https://www.jmlr.org/papers/v5/rifkin04a.html).

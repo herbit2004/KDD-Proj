@@ -1,10 +1,14 @@
 # Density-Stratified Neighbor Preservation for RAE
 
-**COMP5331 project type:** Research  
-**Group number:** [Group number]  
-**Members (name; student ID; research/FYP supervisor and topic, if applicable):** [Member 1]; [Member 2]; [Member 3]; [Member 4]; [Member 5]; [Member 6, if applicable]  
-**Relationship to members' research/FYP:** [For each member, state whether a research/FYP topic exists and, if so, explain how this course project differs.]  
-**Course-project declaration:** This work is undertaken for COMP5331 and will be reported as a course project.
+**COMP5331 project type:** Research
+**Group number:** [Group number]
+**Member 1:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 2:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 3:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 4:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 5:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 6 (if applicable):** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Declaration:** This project is conducted solely within COMP5331. It is not work for another course, a research project, or an FYP.
 
 ## Project description
 
@@ -16,7 +20,7 @@ We ask whether RAE's neighborhood preservation varies systematically with local 
 
 ### Prior work and scope of contribution
 
-The main paper is Han Zhang and Dongfang Zhao, “RAE: A Neural Network Dimensionality Reduction Method for Nearest Neighbors Preservation in Vector Search,” ICLR 2026. Our related reading is McInnes, Healy, and Melville, “UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.” We will examine how the papers construct, optimize, and evaluate neighborhoods before selecting the density estimator for our intervention. This will keep the stratified analysis aligned with the retrieval task and clarify whether the observed differences come from a model objective, a sampling decision, or the underlying neighbor graph. We will compare RAE with PCA and UMAP to establish whether any observed density effect is distinctive to RAE or a general cost of reduction.
+The main paper is Han Zhang and Dongfang Zhao, “RAE: A Neural Network Dimensionality Reduction Method for Nearest Neighbors Preservation in Vector Search,” KDD 2026. Our related reading is McInnes, Healy, and Melville, “UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.” We will examine how the papers construct, optimize, and evaluate neighborhoods before selecting the density estimator for our intervention. This will keep the stratified analysis aligned with the retrieval task and clarify whether the observed differences come from a model objective, a sampling decision, or the underlying neighbor graph. We will compare RAE with PCA and UMAP to establish whether any observed density effect is distinctive to RAE or a general cost of reduction.
 
 Density-based sampling and weighting are broad existing ideas, so our contribution is specifically a density-stratified diagnosis and a controlled integration into RAE's neighbor-preservation training setting. We will implement one simple rule rather than introducing a suite of loosely related heuristics. For every training vector, we will estimate local density from its distance to the kth neighbor in the original space, using a neighbor index built only from training data. Vectors will be divided into density quantiles. The proposed change will upsample underrepresented or low-recall density strata according to a prespecified formula, while keeping batch size and total optimizer steps unchanged. We will avoid using test recall to choose the sampling weights. A validation fold may be used to select among a small predefined set of strengths.
 
@@ -35,7 +39,17 @@ The deliverables are a reproducible small-data RAE training setup, data and dens
 
 As an additional diagnostic, we will measure how often a point's original-space neighbors belong to a different density stratum. Boundary points of this kind may be difficult for a reason other than low sample density alone. We will therefore show results both with all points and with boundary points marked separately. This analysis can tell us whether the proposed sampler addresses true sparse-region failures or merely shifts errors toward transitions between groups. It also limits the risk of presenting a density-group mean as a complete account of local geometry.
 
+### Closest methodological context
+
+UMAP builds a neighborhood graph using local scaling and provides a widely used dimensionality-reduction reference, but its visual-embedding objective is different from retrieval recall. Zelnik-Manor and Perona demonstrate why a single global scale can be unsuitable when clusters have different local densities; their self-tuning spectral method motivates our density stratification without itself solving the RAE training problem. Fu and Zhao's QPAD is a recent retrieval-oriented reduction method that explicitly targets nearest-neighbor structure. We will read QPAD to delimit what is already known about retrieval-aware objectives and, if a compatible implementation exists, to add a retrieval-specific numerical baseline. The proposed intervention is narrower: it tests whether a fixed RAE model's training exposure can be redistributed across density strata while its architecture and objective remain unchanged.
+
+### Implementation and data interface
+
+The author implementation includes separate training and baseline entry points, but its data loader expects specific precomputed embedding files for CelebA, IMDb, Tiny ImageNet, Flickr30k, or SIFT1B. Our synthetic mixtures and small public vectors will therefore require a documented loader adapter that produces the same tensor and split format before any training claim can be made. We will first verify the published training and retrieval logic on a tiny synthetic matrix, then use a manageable subset of one documented public vector source. Density bins will be computed from original-space training neighbors and frozen before fitting either RAE variant. We will save query/reference IDs so that original-space and reduced-space recall are evaluated against exactly the same neighbor task. The density-aware intervention will change sampling weights only; its optimizer, encoder, target dimension, and number of update steps will match the unchanged model.
+
 ## Papers to read
 
-1. Han Zhang and Dongfang Zhao. “RAE: A Neural Network Dimensionality Reduction Method for Nearest Neighbors Preservation in Vector Search.” ICLR 2026. [Paper](https://arxiv.org/abs/2509.25839) · [Code](https://github.com/explorerZH/RAE-KDD2026).
-2. Leland McInnes, John Healy, and James Melville. “UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.” arXiv:1802.03426. [Paper](https://arxiv.org/abs/1802.03426).
+1. **Main paper:** Han Zhang and Dongfang Zhao. “RAE: A Neural Network Dimensionality Reduction Method for Nearest Neighbors Preservation in Vector Search.” *KDD*, 2026; available manuscript carries an earlier ICLR header. [arXiv paper](https://arxiv.org/abs/2509.25839).
+2. **Neighborhood baseline:** Leland McInnes, John Healy, and James Melville. “UMAP: Uniform Manifold Approximation and Projection for Dimension Reduction.” arXiv:1802.03426, 2018. [Preprint](https://arxiv.org/abs/1802.03426).
+3. **Local-scale foundation:** Lihi Zelnik-Manor and Pietro Perona. “Self-Tuning Spectral Clustering.” *Advances in Neural Information Processing Systems* 17, 2004. [Proceedings PDF](https://proceedings.neurips.cc/paper/2004/file/40173ea48d9567f1f393b20c855bb40b-Paper.pdf).
+4. **Retrieval-oriented neighboring work:** Jiuzhou Fu and Dongfang Zhao. “QPAD: Quantile-Preserving Approximate Dimension Reduction for Nearest Neighbors Preservation in High-Dimensional Vector Search.” arXiv:2504.16335, 2025. [Preprint](https://arxiv.org/abs/2504.16335).

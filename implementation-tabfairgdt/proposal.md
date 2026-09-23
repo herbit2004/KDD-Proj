@@ -1,10 +1,14 @@
 # Reproducing the Speed, Utility, and Fairness of TABFAIRGDT
 
-**COMP5331 project type:** Implementation  
-**Group number:** [Group number]  
-**Members (name; student ID; research/FYP supervisor and topic, if applicable):** [Member 1]; [Member 2]; [Member 3]; [Member 4]; [Member 5]; [Member 6, if applicable]  
-**Relationship to members' research/FYP:** [For each member, state whether a research/FYP topic exists and, if so, explain how this course project differs.]  
-**Course-project declaration:** This work is undertaken for COMP5331 and will be reported as a course project.
+**COMP5331 project type:** Implementation
+**Group number:** [Group number]
+**Member 1:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 2:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 3:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 4:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 5:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 6 (if applicable):** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Declaration:** This project is conducted solely within COMP5331. It is not work for another course, a research project, or an FYP.
 
 ## Project description
 
@@ -37,6 +41,17 @@ The project will provide scripts for data preparation, generator fitting and sam
 
 We will retain the random seeds and generated samples used for every reported setting.
 
+### Relation to fair-data literature
+
+FairGAN establishes fair synthetic generation as a way to influence the behavior of classifiers trained on generated records, and provides a useful conceptual comparison to a tree-based generator. Panagiotou, Roy, and Ntoutsi's comparative study examines the joint effects of target-class and sensitive-group imbalance, directly motivating our group-count diagnostics. Abroshan and colleagues distinguish fairness constraints imposed on generated data from the behavior of downstream predictions; this helps us specify which notion the TABFAIRGDT experiment actually tests. We will use these readings to define the fairness metrics and interpret the utility trade-off. They do not oblige us to reproduce a large GAN benchmark: numerical baselines will be selected from the released code only when their data preparation and training budgets can be matched.
+
+### Reproduction checkpoints
+
+The released repository offers a minimal example and separate experiment scripts; its dataset loader can retrieve supported benchmarks and cache them locally. We will first use the smallest documented example to identify the generator's fitting and sampling calls. Adult will be the first full benchmark because it has a clearly documented prediction label and a commonly used group attribute. We will record the loader's raw source, preprocessing choices, cache version, and train/test split, then repeat the same downstream classifier evaluation for real and generated training samples. A utility result will be accompanied by the synthetic data's group counts and outcome prevalence, since a fairness score can change simply because one group is undersampled. The initial baseline set will be the no-generation real-data reference and one generator already supported by the repository. Additional baselines will be included only with matched sample counts and preprocessing.
+
 ## Papers to read
 
-1. Emmanouil Panagiotou et al. “TABFAIRGDT: A Fast Fair Tabular Data Generator using Autoregressive Decision Trees.” ICDM 2025. [Paper](https://arxiv.org/abs/2509.19927) · [Author implementation](https://github.com/Panagiotou/TABFAIRGDT).
+1. **Main paper:** Emmanouil Panagiotou, Benoît Ronval, Arjun Roy, Ludwig Bothmann, Bernd Bischl, Siegfried Nijssen, and Eirini Ntoutsi. “TABFAIRGDT: A Fast Fair Tabular Data Generator using Autoregressive Decision Trees.” *IEEE ICDM*, 2025. [arXiv paper](https://arxiv.org/abs/2509.19927).
+2. **Generative baseline and motivation:** Depeng Xu, Shuhan Yuan, Lu Zhang, and Xintao Wu. “FairGAN: Fairness-aware Generative Adversarial Networks.” *IEEE BigData*, pp. 570–575, 2018. [arXiv paper](https://arxiv.org/abs/1805.11202).
+3. **Imbalance evidence:** Emmanouil Panagiotou, Arjun Roy, and Eirini Ntoutsi. “Synthetic Tabular Data Generation for Class Imbalance and Fairness: A Comparative Study.” arXiv:2409.05215, 2024. [Preprint](https://arxiv.org/abs/2409.05215).
+4. **Fairness definition:** Mahed Abroshan, Andrew Elliott, and Mohammad Mahdi Khalili. “Imposing Fairness Constraints in Synthetic Data Generation.” *AISTATS*, PMLR 238:2269–2277, 2024. [Proceedings paper](https://proceedings.mlr.press/v238/abroshan24a.html).

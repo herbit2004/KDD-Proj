@@ -1,10 +1,14 @@
 # When Do Simple Graph Features Fail on Structured Link Anomalies?
 
-**COMP5331 project type:** Research  
-**Group number:** [Group number]  
-**Members (name; student ID; research/FYP supervisor and topic, if applicable):** [Member 1]; [Member 2]; [Member 3]; [Member 4]; [Member 5]; [Member 6, if applicable]  
-**Relationship to members' research/FYP:** [For each member, state whether a research/FYP topic exists and, if so, explain how this course project differs.]  
-**Course-project declaration:** This work is undertaken for COMP5331 and will be reported as a course project.
+**COMP5331 project type:** Research
+**Group number:** [Group number]
+**Member 1:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 2:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 3:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 4:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 5:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 6 (if applicable):** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Declaration:** This project is conducted solely within COMP5331. It is not work for another course, a research project, or an FYP.
 
 ## Project description
 
@@ -35,7 +39,16 @@ The project will produce code for controlled stream generation, anomaly injectio
 
 We will publish the anomaly-generator parameters alongside each result so that difficulty levels are defined by reproducible mechanisms rather than descriptive names alone.
 
+### Position among dynamic-graph detectors
+
+The main paper's strong result is specifically about detecting randomly injected links with inexpensive features. Poštuvan and colleagues formulate link anomaly detection in a continuous-time dynamic graph, providing an alternative view of temporal context. MIDAS focuses on microclusters and bursts in edge streams and therefore gives a useful point of comparison for our temporal-burst condition, though its detection target differs from isolated link replacement. These distinctions will shape the hypotheses: a mechanism that preserves node activity and community membership may weaken static graph cues, while a burst detector may retain an advantage on temporally concentrated events. We will keep task definitions visible in every comparison and will not pool incompatible anomaly types into a single performance claim.
+
+### Experimental controls
+
+The released TGF repository supplies preprocessing, injection, feature extraction, learning stages, and example link-stream data. We will first use those examples to establish the paper's random-injection reference result, then add new anomaly generators at the injection stage while keeping the subsequent feature and classifier code fixed. The structured mechanisms will be calibrated to match the random condition in anomaly prevalence, node activity distribution, and event-time distribution. We will compare each positive set with normal events on these observable properties before training a detector. Feature selection will be fit within each training split, with the selected feature names and extraction costs published for every mechanism. This design distinguishes a gain from true complementarity among graph and temporal cues from a gain caused by inadvertently encoding the anomaly generator. On real link streams, the injected labels will be described as synthetic labels applied to real background activity.
+
 ## Papers to read
 
-1. Matthieu Latapy and Stephany Rajeh. “Trivial Graph Features and Classical Learning are Enough to Detect Random Anomalies.” ICDM 2025. [Paper](https://arxiv.org/abs/2603.01841) · [Code](https://github.com/StephanyRajeh/TGF).
-2. Tim Poštuvan, Claas Grohnfeldt, Michele Russo, and Giulio Lovisotto. “Learning-Based Link Anomaly Detection in Continuous-Time Dynamic Graphs.” TMLR 2024. [Paper](https://arxiv.org/abs/2405.18050).
+1. **Main paper:** Matthieu Latapy and Stephany Rajeh. “Trivial Graph Features and Classical Learning are Enough to Detect Random Anomalies.” *IEEE ICDM*, 2025. [arXiv paper](https://arxiv.org/abs/2603.01841).
+2. **Dynamic-link setting:** Tim Poštuvan, Claas Grohnfeldt, Michele Russo, and Giulio Lovisotto. “Learning-Based Link Anomaly Detection in Continuous-Time Dynamic Graphs.” *Transactions on Machine Learning Research*, 2024. [arXiv paper](https://arxiv.org/abs/2405.18050).
+3. **Burst-oriented comparator:** Siddharth Bhatia, Bryan Hooi, Minji Yoon, Kijung Shin, and Christos Faloutsos. “MIDAS: Microcluster-Based Detector of Anomalies in Edge Streams.” *AAAI* 34(04):3242–3249, 2020. [Proceedings paper](https://ojs.aaai.org/index.php/AAAI/article/view/5724).

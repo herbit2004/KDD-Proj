@@ -1,10 +1,14 @@
 # Adaptive Fairness Weighting for Community Detection on Group-Imbalanced Graphs
 
-**COMP5331 project type:** Research  
-**Group number:** [Group number]  
-**Members (name; student ID; research/FYP supervisor and topic, if applicable):** [Member 1]; [Member 2]; [Member 3]; [Member 4]; [Member 5]; [Member 6, if applicable]  
-**Relationship to members' research/FYP:** [For each member, state whether a research/FYP topic exists and, if so, explain how this course project differs.]  
-**Course-project declaration:** This work is undertaken for COMP5331 and will be reported as a course project.
+**COMP5331 project type:** Research
+**Group number:** [Group number]
+**Member 1:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 2:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 3:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 4:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 5:** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Member 6 (if applicable):** Student ID [ ]; name [ ]; research/FYP supervisor [name or none]; own research/FYP topic [topic or none]; difference from this project [explanation or not applicable].
+**Declaration:** This project is conducted solely within COMP5331. It is not work for another course, a research project, or an FYP.
 
 ## Project description
 
@@ -22,11 +26,11 @@ Our adaptive rule will use only statistics available from the graph and sensitiv
 
 ### Data and experimental protocol
 
-The primary data will be attributed stochastic-block-model graphs. We will vary the sensitive-group ratio, the number of communities, within- versus across-community connection probabilities, and the correlation between sensitive groups and planted communities. These factors can be changed independently enough to reveal when a fairness objective conflicts sharply with structural quality. Graphs will initially contain roughly 500 to 2,000 nodes, which permits repeated runs on accessible hardware. We will also use one public real graph with group-related node attributes, such as a documented Deezer social-network subset, if its attribute semantics and use conditions fit the fairness question. We will describe the attribute as a measured group label rather than presuming it has the same ethical meaning as a protected characteristic in every context.
+The primary data will be attributed stochastic-block-model graphs. We will vary the two-group ratio, the number of communities, within- versus across-community connection probabilities, and the correlation between sensitive groups and planted communities. These factors can be changed independently enough to reveal when a fairness objective conflicts sharply with structural quality. Graphs will initially contain roughly 500 to 2,000 nodes, which permits repeated runs on accessible hardware. We will also use one public real graph with group-related node attributes, such as a documented Deezer social-network subset, if its attribute semantics and use conditions fit the fairness question. We will describe the attribute as a measured group label rather than presuming it has the same ethical meaning as a protected characteristic in every context.
 
 For each graph and method, we will report modularity, a community-level group-representation disparity, and the worst-group coverage measure. On synthetic graphs, where planted community labels are known, we will additionally report adjusted Rand index and normalized mutual information. A real network generally lacks a trusted community ground truth, so we will not use those supervised metrics there. We will compare the main paper's fixed-weight method, a standard modularity-oriented community detector, the related group-modularity baseline where feasible, and the adaptive rule applied to the same underlying method. We will include MOUFLON if a compatible implementation and setup can be established; otherwise, we will compare its stated formulation and published results conceptually while keeping experimental claims tied to runnable baselines.
 
-We will show quality–fairness Pareto curves across the fixed-weight grid, then locate the adaptive rule's outcome on each curve. A scalar summary alone can hide a poor trade-off, so both metrics and group-specific distributions will remain visible. Results will be averaged across several graph seeds, with variability shown. We will inspect failure cases in which the proposed rule improves parity but collapses communities, or preserves modularity while leaving a minority group concentrated. To distinguish selection quality from model optimization noise, we will keep random seeds, training budgets, and initialization policy aligned where possible. Sensitivity to graph size and the number of sensitive groups will be a secondary analysis only after the two main factors have been studied.
+We will show quality–fairness Pareto curves across the fixed-weight grid, then locate the adaptive rule's outcome on each curve. A scalar summary alone can hide a poor trade-off, so both metrics and group-specific distributions will remain visible. Results will be averaged across several graph seeds, with variability shown. We will inspect failure cases in which the proposed rule improves parity but collapses communities, or preserves modularity while leaving a minority group concentrated. To distinguish selection quality from model optimization noise, we will keep random seeds, training budgets, and initialization policy aligned where possible. Sensitivity to graph size and the minority-group share will be a secondary analysis after the two main factors have been studied.
 
 ### Deliverables and expected outcomes
 
@@ -35,8 +39,17 @@ The project will provide graph-generation code, configurations, fixed-weight and
 
 We will keep a record of the group counts within every output community, so that a favorable aggregate fairness score cannot hide an isolated community with severe underrepresentation.
 
+### Relationship among graph objectives
+
+DMoN supplies the modularity-based deep graph clustering foundation underlying the main paper's model family. Gkartzios and colleagues' group-modularity paper gives a non-deep fairness-aware objective; their later ICDM paper integrates modularity and fairness into deep community detection. MOUFLON addresses multi-group modularity-based fairness, so our study cannot claim that either fair modularity or group-sensitive weighting is new in general. We will compare the papers' fairness definitions and optimization settings before fixing our own two-group metric. The resulting research question concerns the stability of one selected weight across graph regimes, measured against a full fixed-weight curve. This positions the adaptive rule as a testable operating-point procedure rather than a replacement for the established community-detection objectives.
+
+### Method compatibility and data protocol
+
+The main-paper implementation reads a binary sensitive-group field and its fairness calculations assume groups encoded as 0 and 1. Our primary study will therefore vary the proportion of two groups rather than claim a multi-group implementation. We will generate graphs with fixed planted-community proportions while independently changing the sensitive-group ratio and the correlation between group membership and communities. This separation is necessary to tell whether an apparent fairness gain reflects weight selection or simply an easier graph. For the real-data stage, the Deezer network has a binary label inferred from users' names; it is a proxy with uncertain individual accuracy, so we will interpret results as balance with respect to that published label, not as a measured social outcome. We will retain the original graph's node and edge counts, record any induced-subgraph sampling, and avoid choosing the adaptive rule from real-graph test outcomes.
+
 ## Papers to read
 
-1. Christos Gkartzios, Evaggelia Pitoura, and Panayiotis Tsaparas. “Modularity-Fair Deep Community Detection.” ICDM 2025. [Paper](https://www.cs.uoi.gr/~tsap/publications/icdm-2025.pdf) · [Code](https://github.com/gartzis/Modularity-Fair-Deep-Community-Detection).
-2. Christos Gkartzios, Evaggelia Pitoura, and Panayiotis Tsaparas. “Fair Network Communities through Group Modularity.” WWW 2025. [Paper](https://www.cse.uoi.gr/~tsap/publications/Gkartzios-WWW2025.pdf).
-3. Georgios Panayiotou, Anand Mathew Muthukulam Simon, Matteo Magnani, and Ece Calikus. “MOUFLON: Multi-group Modularity-based Fairness-aware Community Detection.” *Data Mining and Knowledge Discovery*, 2026. [Paper](https://link.springer.com/article/10.1007/s10618-026-01260-5).
+1. **Main paper:** Christos Gkartzios, Evaggelia Pitoura, and Panayiotis Tsaparas. “Modularity-Fair Deep Community Detection.” *IEEE ICDM*, 2025. DOI: [10.1109/ICDM65498.2025.00036](https://doi.org/10.1109/ICDM65498.2025.00036).
+2. **Deep modularity foundation:** Anton Tsitsulin, John Palowitch, Bryan Perozzi, and Emmanuel Müller. “Graph Clustering with Graph Neural Networks.” *Journal of Machine Learning Research* 24(127):1–21, 2023. [Paper](https://www.jmlr.org/papers/v24/20-998.html).
+3. **Fair modularity objective:** Christos Gkartzios, Evaggelia Pitoura, and Panayiotis Tsaparas. “Fair Network Communities through Group Modularity.” *The Web Conference*, 2025. [Author PDF](https://www.cse.uoi.gr/~tsap/publications/Gkartzios-WWW2025.pdf).
+4. **Closest multi-group work:** Georgios Panayiotou, Anand Mathew Muthukulam Simon, Matteo Magnani, and Ece Calikus. “MOUFLON: Multi-group Modularity-based Fairness-aware Community Detection.” *Data Mining and Knowledge Discovery* 40, article 92, 2026. [Publisher article](https://link.springer.com/article/10.1007/s10618-026-01260-5).
