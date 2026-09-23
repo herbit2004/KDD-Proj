@@ -1,0 +1,5 @@
+# References
+
+1. **Main paper:** Pernille Matthews, Lena Krieger, Tommaso Amico, Arthur Zimek, Thomas Seidl, and Ira Assent. “ExDBSCAN: Explaining DBSCAN with Counterfactual Reasoning.” *ACM SIGKDD Conference on Knowledge Discovery and Data Mining (KDD)*, 2026, as listed in the COMP5331 suggested topics. [Author preprint record](https://arxiv.org/abs/2605.30225) · [extended PDF](https://arxiv.org/pdf/2605.30225). Local file: `local-pdf/2605.30225v2.pdf` (24 pages; titled “Additional Material” and containing the full method). The arXiv record uses a non-exclusive distribution license, which does not itself grant redistribution rights; use the source link for public access.
+
+Implementation: [author GitHub repository](https://github.com/tommasoamico/ExDBSCAN). The repository's code is publicly visible, but no license file was found during this review. Public benchmark data may be obtained through [OpenML](https://www.openml.org/) or [UCI](https://archive.ics.uci.edu/); dataset selection and exact preprocessing will be recorded with the experiments.

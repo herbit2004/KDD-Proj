@@ -1,0 +1,42 @@
+# Adaptive Fairness Weighting for Community Detection on Group-Imbalanced Graphs
+
+**COMP5331 project type:** Research  
+**Group number:** [Group number]  
+**Members (name; student ID; research/FYP supervisor and topic, if applicable):** [Member 1]; [Member 2]; [Member 3]; [Member 4]; [Member 5]; [Member 6, if applicable]  
+**Relationship to members' research/FYP:** [For each member, state whether a research/FYP topic exists and, if so, explain how this course project differs.]  
+**Course-project declaration:** This work is undertaken for COMP5331 and will be reported as a course project.
+
+## Project description
+
+### Background and research question
+
+Community detection groups nodes according to network structure. Modularity rewards partitions with more within-community connections than a degree-preserving reference model predicts. A high-modularity partition, however, can reproduce or intensify an uneven distribution of demographic or other sensitive groups across communities. The problem becomes especially difficult when group sizes are unequal: a fairness penalty calibrated for a balanced population can over-correct a small group or leave it concentrated in a few communities. Gkartzios, Pitoura, and Tsaparas combine modularity and fairness in deep community detection, while their group-modularity work offers another way to define the objective. More recent MOUFLON work explicitly studies multi-group modularity-based fairness. Together these papers show that the general quality–fairness trade-off is established, but they also motivate a focused question about how an operating point should change when the graph's group proportions and homophily change.
+
+Our question is whether a single fixed fairness weight is reliable across graphs with different group imbalance and within-group connectivity, and whether a simple rule based on observable training-graph statistics can select a more suitable weight. We hypothesize that fixed weights can produce noticeably different quality–fairness trade-offs as minority-group proportion or homophily changes. We further hypothesize that a prespecified adaptive rule can reduce the variability of fairness outcomes without sacrificing a large amount of modularity. These hypotheses can fail: one weight may be robust across the tested range, or adaptive selection may add complexity without improving the Pareto frontier. We will report those outcomes rather than treating a favorable selected graph as sufficient evidence.
+
+### Relationship to previous work
+
+The main reference is “Modularity-Fair Deep Community Detection,” ICDM 2025. We will use its public implementation to establish fixed-weight baselines and to understand the deep and spectral variants of the method. “Fair Network Communities through Group Modularity,” WWW 2025, provides a related non-deep objective and comparison. “MOUFLON: Multi-group Modularity-based Fairness-aware Community Detection,” 2026, is a particularly close recent paper. We will read its objective, tuning procedure, and treatment of unequal groups before defining our final comparison. The proposed novelty is not the existence of a fairness weight, group-aware modularity, or multi-group fair community detection. It is a controlled analysis of how imbalance and homophily jointly affect weight selection within a small, reproducible experimental setting, plus one transparent adaptive rule whose inputs and selection procedure are specified in advance.
+
+Our adaptive rule will use only statistics available from the graph and sensitive-group labels before evaluating a partition, such as group proportions and an estimate of within-group edge concentration. We will test a small family of monotone formulas that adjust a baseline fairness weight according to these statistics, using a validation set of synthetic graphs to select coefficients. Test graphs will have different generator seeds and held-out parameter combinations. This separation prevents the adaptive method from choosing the best weight after seeing test modularity or fairness. We will retain a fixed-weight grid as a full comparison curve and treat a graph-specific hindsight optimum only as an upper bound, not as a deployable baseline.
+
+### Data and experimental protocol
+
+The primary data will be attributed stochastic-block-model graphs. We will vary the sensitive-group ratio, the number of communities, within- versus across-community connection probabilities, and the correlation between sensitive groups and planted communities. These factors can be changed independently enough to reveal when a fairness objective conflicts sharply with structural quality. Graphs will initially contain roughly 500 to 2,000 nodes, which permits repeated runs on accessible hardware. We will also use one public real graph with group-related node attributes, such as a documented Deezer social-network subset, if its attribute semantics and use conditions fit the fairness question. We will describe the attribute as a measured group label rather than presuming it has the same ethical meaning as a protected characteristic in every context.
+
+For each graph and method, we will report modularity, a community-level group-representation disparity, and the worst-group coverage measure. On synthetic graphs, where planted community labels are known, we will additionally report adjusted Rand index and normalized mutual information. A real network generally lacks a trusted community ground truth, so we will not use those supervised metrics there. We will compare the main paper's fixed-weight method, a standard modularity-oriented community detector, the related group-modularity baseline where feasible, and the adaptive rule applied to the same underlying method. We will include MOUFLON if a compatible implementation and setup can be established; otherwise, we will compare its stated formulation and published results conceptually while keeping experimental claims tied to runnable baselines.
+
+We will show quality–fairness Pareto curves across the fixed-weight grid, then locate the adaptive rule's outcome on each curve. A scalar summary alone can hide a poor trade-off, so both metrics and group-specific distributions will remain visible. Results will be averaged across several graph seeds, with variability shown. We will inspect failure cases in which the proposed rule improves parity but collapses communities, or preserves modularity while leaving a minority group concentrated. To distinguish selection quality from model optimization noise, we will keep random seeds, training budgets, and initialization policy aligned where possible. Sensitivity to graph size and the number of sensitive groups will be a secondary analysis only after the two main factors have been studied.
+
+### Deliverables and expected outcomes
+
+The project will provide graph-generation code, configurations, fixed-weight and adaptive-weight experiments, evaluation scripts, and figures that make the trade-offs visible. The report will state exactly how fairness and quality were measured and how the validation graphs differed from test graphs. We expect a fixed weight to become less reliable under some imbalance/homophily combinations, but the experiment may instead find a wide stable range. In either case, the result will help explain when adaptive tuning is justified. The workload is bounded by small graphs and a compact parameter grid, while the literature comparison keeps the claim aligned with existing fair-community methods.
+
+
+We will keep a record of the group counts within every output community, so that a favorable aggregate fairness score cannot hide an isolated community with severe underrepresentation.
+
+## Papers to read
+
+1. Christos Gkartzios, Evaggelia Pitoura, and Panayiotis Tsaparas. “Modularity-Fair Deep Community Detection.” ICDM 2025. [Paper](https://www.cs.uoi.gr/~tsap/publications/icdm-2025.pdf) · [Code](https://github.com/gartzis/Modularity-Fair-Deep-Community-Detection).
+2. Christos Gkartzios, Evaggelia Pitoura, and Panayiotis Tsaparas. “Fair Network Communities through Group Modularity.” WWW 2025. [Paper](https://www.cse.uoi.gr/~tsap/publications/Gkartzios-WWW2025.pdf).
+3. Georgios Panayiotou, Anand Mathew Muthukulam Simon, Matteo Magnani, and Ece Calikus. “MOUFLON: Multi-group Modularity-based Fairness-aware Community Detection.” *Data Mining and Knowledge Discovery*, 2026. [Paper](https://link.springer.com/article/10.1007/s10618-026-01260-5).
