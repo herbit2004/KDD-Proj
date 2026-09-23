@@ -12,7 +12,7 @@ RAE 以神经网络把高维向量压缩到低维，目标是尽可能保留供�
 
 | 维度 | 状态与具体入口 |
 |---|---|
-| 论文版本 | [arXiv v1 PDF](https://arxiv.org/abs/2509.25839) 首页写 ICLR 2026；[作者仓库](https://github.com/explorerZH/RAE-KDD2026) 名称与课程清单写 KDD 2026。论文内容和最终会议信息需按 Canvas 原件核对，不能混用版本。 |
+| 论文版本 | [arXiv v1 PDF](https://arxiv.org/abs/2509.25839) 首页写 ICLR 2026；[作者仓库](https://github.com/explorerZH/RAE-KDD2026) 名称与课程清单写 KDD 2026。Canvas 提供的 13 页 PDF 也写 ICLR 2026；组内正式引文应据 PDF 标注，选定此题后可向老师确认推荐清单的会议信息。 |
 | 代码 | 作者仓库 MIT；有 `train.py`、基线和 requirements，数据不捆绑。应先复现小数据上的一次完整训练/评估，再扩展方法。 |
 | 数据 | 可控高斯混合向量、[UCI](https://archive.ics.uci.edu/)或 scikit-learn 的 digits 特征、公开嵌入向量小样本。记录原始维度、样本量、标准化和近邻搜索库版本。 |
 | 训练/评估 | 需训练 RAE 与改动模型；FAISS/近邻索引用于评估。小数据 CPU 可以试通，小 GPU 有利于多种子比较。 |
